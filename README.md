@@ -1,2 +1,2 @@
 # talks
-A repository containing my talks 
+A repository containing various talks
