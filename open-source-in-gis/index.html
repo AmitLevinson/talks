@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Presentation Ninja</title>
+    <title>index.knit</title>
     <meta charset="utf-8" />
-    <meta name="author" content="Yihui Xie" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
@@ -26,19 +25,26 @@
   </head>
   <body>
     <textarea id="source">
-class: center, middle, inverse, title-slide
 
-# Presentation Ninja
-## ⚔<br/>with xaringan
-### Yihui Xie
-### RStudio, PBC
-### 2016/12/12 (updated: 2021-05-29)
+
+
+```r
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  fig.width=9, fig.height=3.5, fig.retina=3,
+  out.width = "100%",
+  cache = FALSE,
+  echo = FALSE,
+  message = FALSE, 
+  warning = FALSE,
+  fig.show = TRUE,
+  hiline = TRUE
+)
+```
+
+
 
 ---
-
-
----
-
 name: title-slide
 
 .footnote[Add a nice cover image and info about me]
@@ -54,14 +60,181 @@ Amit Levinson
 
 [amitlevinson.com](https://www.amitlevinson.com)
 
-Twitter icon
-
-Linkedin Icon
-
-GitHub Icon
+Twitter icon | Linkedin Icon | GitHub Icon
 
 
 ---
+# About me
+
+- Sociology MA Graduate
+
+- Been using R Programming lanugade for &lt; 2 years
+
+- Enjoy open source tools (Linux, Git, MySQL)
+
+- Had no idea what is GIS prior to using such tools
+
+- Big fan of cookies &amp; milk
+
+---
+
+# Objectives for today
+
+- [X] Learn a little about me
+
+- Explore some of my initial attempts at spatial data
+
+- Unravel my recent project as dive into GIS
+
+- **Why is all this related to open source**
+
+---
+## How I first encountered data
+
+
+```
+##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 1          5.1         3.5          1.4         0.2  setosa
+## 2          4.9         3.0          1.4         0.2  setosa
+## 3          4.7         3.2          1.3         0.2  setosa
+## 4          4.6         3.1          1.5         0.2  setosa
+## 5          5.0         3.6          1.4         0.2  setosa
+## 6          5.4         3.9          1.7         0.4  setosa
+```
+
+---
+
+## How I encountered ~spatial~ data.fn[1]
+
+
+
+
+```r
+head(shelters[,2])
+```
+
+```
+*## Simple feature collection with 6 features and 0 fields
+*## Geometry type: POINT
+*## Dimension:     XY
+*## Bounding box:  xmin: 181680.1 ymin: 574027.4 xmax: 181972.9 ymax: 574304
+*## Projected CRS: Israel 1993 / Israeli TM Grid
+## # A tibble: 6 x 1
+##              geometry
+*##           &lt;POINT [m]&gt;
+*## 1 (181710.6 574217.8)
+## 2   (181680.1 574304)
+## 3   (181820.6 574243)
+## 4 (181819.3 574027.4)
+## 5 (181972.9 574046.2)
+## 6 (181912.3 574151.1)
+```
+
+[1] For the sake of simplicity and to reflect my learning process, I address spatial data here as a vector format (and not, for example, raster).
+
+
+???
+Fix foot note
+
+---
+background-image: url(https://media.giphy.com/media/kfLPQJRuivFwqGBxp3/giphy.gif)
+background-size: contain
+
+
+???
+
+Gif credit: tenor.com
+---
+
+
+```
+## # A tibble: 6 x 3
+##   name    lat   lon
+##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 ג/2    31.3  34.8
+## 2 ג/1    31.3  34.8
+## 3 ג/25   31.3  34.8
+## 4 ג/33   31.3  34.8
+## 5 ג/36   31.3  34.8
+## 6 ג/3    31.3  34.8
+```
+
+
+
+---
+- Add disclaimer about my knowledge - tip of the ice
+- [ ] Explore some of my initial attempts at spatial data
+
+   - How was I used to working with data?
+  
+   - First attempt at plotting bomb shelters - B7 open access data
+  
+   - What is this column and weird data format?
+  
+   - Oh I know, final output
+  
+   - very nice and excited
+ 
+ - 30 daymapchallenge
+ 
+    - 1 example of population plot enhancing
+    
+- [ ] Unravel my recent project and what it taught me about working with GIS
+
+  - I realized I don't know and want to learn more: What on earth are projections? What ~the hell~ is a raster? how can I manipulate polygons? What are some cool things in the {sf} library? How can we add interactivity to a map? and what should I do it on?
+
+  - Well let's explore distances, that seems cool. Also came across Dominic's blog post.
+  
+  - Collecting the data using R
+    - scraping
+    - geocoding it
+    - reverse geocoding it
+    - Manually verify locations
+    
+  - OK, preliminary plot, so far so good.
+  
+  - Now for distances, but distance from where?
+    - we need something 'specific'
+    - Create grids, but what are grids?
+    - and what proejction do I need?
+  - Short break, luckily Michael published X during when I was working on it.
+  
+  - Got it, but what exactly occurs here?
+  
+    - So I published a small post on it, small wins
+    - Plus, it got the most attention of a LinkedIn post so far.
+    
+  - So we cut Israel into grids, now what?
+    - Calculate the distance for each square grid.
+    - Any distance? where it's at minimum!
+    - example for one grid
+    - now for all grids a N * M matrix
+    
+  - Ok, but let's add interactivity
+    - use leaflet to the polygon and colors
+    - but also with some simple html &amp; CSS we add a neat layer of interactivity
+  
+  - Publish
+  
+  - Feedback (good)
+    - Email saying it helped them do X
+    - an email someone liking it but suggesting an improvement! How much improved? by XX seconds.
+    - Learn more about maps
+    
+    - Feedback (bad?)
+      - Why a 2 squared km?
+      - Why Golda? don't have anything else interesting to do about?
+      
+- [ ] How's all this related to open source
+  - Not sure I would have done it if I'd still be using my previously learned propreitary software (SPSS)
+  - Extending my already-known-tool to use it in maps
+  - Contributing back to the community
+  - FREE
+  - Code is accessible to explore and manipulate
+  - Expanding my repoirtere of skills
+
+---
+
 
 
 background-image: url(https://upload.wikimedia.org/wikipedia/commons/b/be/Sharingan_triple.svg)
@@ -91,9 +264,6 @@ class: inverse, center, middle
 Install the **xaringan** package from [Github](https://github.com/yihui/xaringan):
 
 
-```r
-remotes::install_github("yihui/xaringan")
-```
 
 --
 
@@ -244,21 +414,10 @@ Limitations:
 # R Code
 
 
-```r
-# a boring regression
-fit = lm(dist ~ 1 + speed, data = cars)
-coef(summary(fit))
-```
-
 ```
 #               Estimate Std. Error   t value     Pr(&gt;|t|)
 # (Intercept) -17.579095  6.7584402 -2.601058 1.231882e-02
 # speed         3.932409  0.4155128  9.463990 1.489836e-12
-```
-
-```r
-dojutsu = c('地爆天星', '天照', '加具土命', '神威', '須佐能乎', '無限月読')
-grep('天', dojutsu, value = TRUE)
 ```
 
 ```
@@ -269,25 +428,13 @@ grep('天', dojutsu, value = TRUE)
 
 # R Plots
 
-
-```r
-par(mar = c(4, 4, 1, .1))
-plot(cars, pch = 19, col = 'darkgray', las = 1)
-abline(fit, lwd = 2)
-```
-
-![](index_files/figure-html/cars-1.svg)&lt;!-- --&gt;
+&lt;img src="index_files/figure-html/cars-1.svg" width="100%" /&gt;
 
 ---
 
 # Tables
 
 If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
-
-
-```r
-knitr::kable(head(iris), format = 'html')
-```
 
 &lt;table&gt;
  &lt;thead&gt;
@@ -357,27 +504,13 @@ See the next page for two HTML widgets.
 
 ---
 
-
-```r
-library(leaflet)
-leaflet() %&gt;% addTiles() %&gt;% setView(-93.65, 42.0285, zoom = 17)
-```
-
-<div id="htmlwidget-870f8209e17aff22a520" style="width:100%;height:432px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-870f8209e17aff22a520">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]}],"setView":[[42.0285,-93.65],17,[]]},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-911f6b9279d164decad4" style="width:100%;height:432px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-911f6b9279d164decad4">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]}],"setView":[[42.0285,-93.65],17,[]]},"evals":[],"jsHooks":[]}</script>
 
 ---
 
-
-```r
-DT::datatable(
-  head(iris, 10),
-  fillContainer = FALSE, options = list(pageLength = 8)
-)
-```
-
-<div id="htmlwidget-02c336546874c77aa149" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-02c336546874c77aa149">{"x":{"filter":"none","fillContainer":false,"data":[["1","2","3","4","5","6","7","8","9","10"],[5.1,4.9,4.7,4.6,5,5.4,4.6,5,4.4,4.9],[3.5,3,3.2,3.1,3.6,3.9,3.4,3.4,2.9,3.1],[1.4,1.4,1.3,1.5,1.4,1.7,1.4,1.5,1.4,1.5],[0.2,0.2,0.2,0.2,0.2,0.4,0.3,0.2,0.2,0.1],["setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Sepal.Length<\/th>\n      <th>Sepal.Width<\/th>\n      <th>Petal.Length<\/th>\n      <th>Petal.Width<\/th>\n      <th>Species<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":8,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[8,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-9e763b9623698ba5b270" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-9e763b9623698ba5b270">{"x":{"filter":"none","fillContainer":false,"data":[["1","2","3","4","5","6","7","8","9","10"],[5.1,4.9,4.7,4.6,5,5.4,4.6,5,4.4,4.9],[3.5,3,3.2,3.1,3.6,3.9,3.4,3.4,2.9,3.1],[1.4,1.4,1.3,1.5,1.4,1.7,1.4,1.5,1.4,1.5],[0.2,0.2,0.2,0.2,0.2,0.4,0.3,0.2,0.2,0.1],["setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Sepal.Length<\/th>\n      <th>Sepal.Width<\/th>\n      <th>Petal.Length<\/th>\n      <th>Petal.Width<\/th>\n      <th>Species<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":8,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[8,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
 
 ---
 
@@ -507,15 +640,6 @@ if (TRUE) {
 ````
 Output:
 
-```r
-if (TRUE) {
-* message("Very important!") 
-}
-```
-
-```
-## Very important!
-```
 
 It is valid R code so you can run it. Note that `{{}}` can wrap an R expression of multiple lines.
 ]
@@ -539,13 +663,6 @@ ggplot(mtcars) +
 Output:
 
 
-```r
-library(ggplot2)
-ggplot(mtcars) + 
-  aes(mpg, disp) + 
-* geom_point() +
-* geom_smooth()
-```
 
 ---
 
@@ -692,10 +809,6 @@ This requires **rmarkdown** &gt;= 2.8 and the [**sass**](https://rstudio.github.
 
 Don't want to learn CSS? Okay, you can use some user-contributed themes. A theme typically consists of two CSS files `foo.css` and `foo-fonts.css`, where `foo` is the theme name. Below are some existing themes:
 
-
-```r
-names(xaringan:::list_css())
-```
 
 ```
 ##  [1] "chocolate-fonts"  "chocolate"        "default-fonts"   

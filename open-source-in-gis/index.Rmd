@@ -11,10 +11,32 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+editor_options: 
+  chunk_output_type: console
 ---
 
----
+```{r}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  fig.width=9, fig.height=3.5, fig.retina=3,
+  out.width = "100%",
+  cache = FALSE,
+  echo = FALSE,
+  message = FALSE, 
+  warning = FALSE,
+  fig.show = TRUE,
+  hiline = TRUE
+)
+```
 
+```{r}
+library(xaringanExtra)
+library(sf)
+library(readr)
+
+```
+
+---
 name: title-slide
 
 .footnote[Add a nice cover image and info about me]
@@ -52,6 +74,59 @@ Twitter icon | Linkedin Icon | GitHub Icon
 
 - [X] Learn a little about me
 
+- Explore some of my initial attempts at spatial data
+
+- Unravel my recent project as dive into GIS
+
+- **Why is all this related to open source**
+
+---
+## How I first encountered data
+
+```{r echo = FALSE}
+head(iris)
+```
+
+---
+
+## How I encountered ~spatial~ data.fn[1]
+
+```{r include = FALSE}
+Sys.setlocale("LC_ALL", "Hebrew")
+
+shelters <- read_sf("data/shelters/shelters.shp")
+```
+
+```{r echo = TRUE, highlight.output=c(1:5, 8,9)}
+head(shelters[,2])
+
+```
+
+[1] For the sake of simplicity and to reflect my learning process, I address spatial data here as a vector format (and not, for example, raster).
+
+
+???
+Fix foot note
+
+---
+background-image: url(https://media.giphy.com/media/kfLPQJRuivFwqGBxp3/giphy.gif)
+background-size: contain
+
+
+???
+
+Gif credit: tenor.com
+---
+
+```{r}
+shelters <- read_csv("data/shelters/shelters.csv")
+
+head(shelters)
+```
+
+
+
+---
 - Add disclaimer about my knowledge - tip of the ice
 - [ ] Explore some of my initial attempts at spatial data
 
