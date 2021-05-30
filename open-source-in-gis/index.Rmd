@@ -11,6 +11,8 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+    includes:
+      after_body: "additional-html/collapse-output.html"
 editor_options: 
   chunk_output_type: console
 ---
@@ -33,6 +35,7 @@ knitr::opts_chunk$set(
 library(xaringanExtra)
 library(sf)
 library(readr)
+library(leaflet)
 
 ```
 
@@ -72,7 +75,6 @@ Twitter icon | Linkedin Icon | GitHub Icon
 
 # Objectives for today
 
-- [X] Learn a little about me
 
 - Explore some of my initial attempts at spatial data
 
@@ -89,7 +91,7 @@ head(iris)
 
 ---
 
-## How I encountered ~spatial~ data.fn[1]
+## How I encountered ~spatial~ data.fn[1] (.shp)
 
 ```{r include = FALSE}
 Sys.setlocale("LC_ALL", "Hebrew")
@@ -118,13 +120,172 @@ background-size: contain
 Gif credit: tenor.com
 ---
 
-```{r}
-shelters <- read_csv("data/shelters/shelters.csv")
+## Using long & lat instead (.csv)
 
-head(shelters)
+```{r highlight.output=c(2)}
+shelters_csv <- read_csv("data/shelters/shelters.csv")
+
+head(shelters_csv[,2:3])
+```
+
+```{r}
+leaflet(shelters_csv) %>% 
+  addTiles() %>% 
+  addCircles(radius = 4, color = "red", fill = TRUE)
+```
+
+???
+
+Fix up highlighting the column
+
+---
+
+## It's time to to learn some GIS
+
+- Tried some additional attempts in the #30daysmapchallenge
+
+- Fiddled around and sometimes hit home
+
+- Realized it's time to get my hand dirty in some spatial data
+
+![]()
+
+---
+class: inverse, center, middle
+
+# Exploring distances and ice-cream parlors
+
+---
+# Background
+
+.pull-left[
+### Inspiration
+
+<iframe src='https://dominicroye.github.io/en/2019/calculating-the-distance-to-the-sea-in-r/' width = 600 height = 300></iframe>
+]
+
+.pull-right[
+### Some serendipitous resources
+
+Michael Dorman's workshop
+
+]
+
+- Let's explore distances!
+
++
+
+- I really like Golda's ice-cream
+
+
+
+---
+
+# Data
+
+Where do you find Golda's ice-cream locations?
+
+--
+
+![](img/golda_css.png)
+---
+
+# Data collection
+
+- [Scrape the data from the website](https://github.com/AmitLevinson/Datasets/blob/master/golda/golda-icecreams.R)
+
+```{r echo = FALSE}
+golda_html_raw <- readRDS("data/golda_html_raw.Rds")
+
+golda_html_raw[2]
+```
+
+--
+
+- Clean it
+
+--
+
+- Geocode the data to get lat & long from addresses
+
+--
+
+- Reverse geocode the long & lat and verify each address.
+
+--
+
+Final output looked like this (total of 79 addresses):
+
+```{r}
+library(readxl)
+locations_raw <- read_xlsx("data/golda_locations_w_English.xlsx")
+
+knitr::kable(locations_raw[2,])
 ```
 
 
+--
+
+Discrepancies were manually verified (though I probably verified everything anyway).
+
+---
+background-image: url(img/worst_day_top.jpg)
+background-size: contain
+---
+background-image: url(img/worst_day_full.jpg)
+background-size: contain
+
+---
+## st_transform
+
+- our initial golda points come as long & lat.
+
+- we need it as geographic coordinates for a plot, and as projected for calculating distances.
+
+
+ADD PLOT WITH POINTS
+
+
+
+???
+
+I wanted to enable users to interact with the map so leaflet was important here (and not, for example, ggplot)
+
+
+
+---
+
+## st_
+
+- We want to calculate distances, but to where?
+
+- Use grids as specific locations
+
+MAP OF israel in grids
+
+???
+The grids help overcoming the reactivity we might find in web based apps
+
+
+
+---
+
+## st_centroid
+
+- But even with a grid, we can take it one step further.
+
+- Find a specific location so it's similar across all points.
+
+[ADD various polygons using st_centroid]
+
+--- 
+
+## st_distance
+
+Now we're ready
+
+
+We now have our grids and 
 
 ---
 - Add disclaimer about my knowledge - tip of the ice
