@@ -39,10 +39,12 @@ library(readr)
 library(leaflet)
 library(dplyr)
 library(readr)
-
 library(purrr)
 library(glue)
 library(htmltools)
+library(ggspatial)
+library(ggrepel)
+library(units)
 
 ```
 
@@ -280,7 +282,7 @@ I wanted to enable users to interact with the map so leaflet was important here 
 
 ---
 
-## st_transform
+### Transforming
 
 Previously leaflet recognized lat & long, but we should be more explicit and specifiy our coordinate reference systems:
 
@@ -312,11 +314,11 @@ golda_meters["geometry"][1,]
 
 ---
 
-### st_make_grid & st_intersection
+### Grids
 
-- We want to calculate distances, but to where?
+We want to calculate distances, but **from where?**
 
-
+--
 
 .column[
 .center[
@@ -331,14 +333,14 @@ ggplot(isr_map_sf)+
   geom_sf()+
   theme_void()
 ```
-<img src='img/plots/map.png' height = 350px>
+<img src='img/plots/map.png' height = 400px>
 ]
 ]
 --
 
 .column[
 .center[
-#### Grid layout
+#### Grid layout (2km<sup>2</sup>)
 
 
 ```{r eval = FALSE}
@@ -353,7 +355,7 @@ ggplot(box_isr)+
 ggsave("img/plots/map.png", width = 4, height = 7)
 ```
 
-<img src='img/plots/squaregrid.png' height = 350px>
+<img src='img/plots/squaregrid.png' height = 400px>
 ]
 ]
 
@@ -378,7 +380,7 @@ ggsave("img/plots/grid_map.png", width = 4, height = 7)
 grid_wgs <- readRDS("data/maps/grid_wgs.rds")
 
 ```
-<img src='img/plots/grid_map.png' height = 350px>
+<img src='img/plots/grid_map.png' height = 400px>
 
 ]
 ]
@@ -391,42 +393,60 @@ The grids help overcoming the reactivity we might find in web based apps
 
 ---
 
-## st_centroid
+### Distances
 
-Now what? Find the distance for each grid:
+--
 
-```{r}
+.pull-left[
+
+Example: 
+```{r echo = FALSE}
 # Create a sampled dataframe
 dataum <- data.frame(
-  geometry = st_geometry(golda_projected[3:9,]),
-  location_grid = st_centroid(rep(grid_wgs[350,],7)))
+  geometry = st_geometry(golda_projected),
+  location_grid = st_centroid(rep(grid_wgs[350,],nrow(golda_projected))))
 
 # Our data points projected to a 
-data_lines <- map_dfc(dataum, ~ st_transform(.x, crs = 2039)) 
+both_distances <- map_dfc(dataum, ~ st_transform(.x, crs = 2039)) 
 
-sample_data <- data_lines %>% 
+```
+
+```{r echo = TRUE}
+example_distances <- st_distance(x = both_distances$geometry, y = both_distances$geometry.1[1])
+# Print 10:
+head(set_units(example_distances, "km"), 10)
+```
+
+
+]
+
+--
+
+```{r eval=  FALSE}
+
+
+sample_data <- both_distances %>% 
   map_dfc(~ st_transform(.x, crs = 4326) %>% st_coordinates(.x)) %>% 
   map_dfc(as.data.frame) %>% 
   set_names(c("golda.x","golda.y", "us.x" ,"us.y")) %>% 
-  cbind(distance = map2_dbl(data_lines$geometry, data_lines$geometry.1,  st_distance),
-        location_polygon = st_transform(data_lines$geometry.1, crs = 4326)) %>% 
+  cbind(distance = map2_dbl(both_distances$geometry, both_distances$geometry.1,  st_distance),
+        location_polygon = st_transform(both_distances$geometry.1, crs = 4326)) %>% 
   mutate(relevant = ifelse(distance == min(distance), "yes", "no"),
          distance = ifelse(relevant == "yes", paste0(round(distance/1000, 0), "km"), round(distance/1000, 0)))
 
-point_labels <- data.frame(x = c(34.802,34.95968, 34.79946),
-                           y = c(30.04696, 29.54952, 31.23412),
+point_labels <- data.frame(x = c(34.802,34.95968, 34.95968),
+                           y = c(30.04696, 29.54952, 32.02051),
                            label = c("Example grid", "Nearest Golda", "Golda locations"))
-library(ggspatial)
-library(ggrepel)
 
 ggplot(isr_map_sf)+
   geom_sf()+
-  geom_point(data = sample_data,mapping= aes(x = golda.x, y = golda.y, color = relevant), size = 1.2)+
+  geom_point(data = sample_data[1:5,],mapping= aes(x = golda.x, y = golda.y, color = relevant), size = 1.2)+
   geom_sf(data = grid_wgs[350,], aes(geometry = geometry), fill = "red", color = "red")+
-  geom_spatial_segment(data = sample_data, mapping = aes(x = us.x, xend = golda.x, y = us.y, yend = golda.y, linetype = relevant, color = relevant), show.legend = FALSE, crs = 4326)+
-  geom_spatial_text_repel(data = sample_data, mapping = aes(x = golda.x,  y = golda.y, label = distance, color = relevant), crs = 4326, hjust = 0.5, size = 3.5)+
+  geom_spatial_segment(data = sample_data[1:5,], mapping = aes(x = us.x, xend = golda.x, y = us.y, yend = golda.y, linetype = relevant, color = relevant), show.legend = FALSE, crs = 4326)+
+    geom_spatial_segment(data = sample_data[-c(1:5),], mapping = aes(x = us.x, xend = golda.x, y = us.y, yend = golda.y), linetype = "solid", show.legend = FALSE, crs = 4326, color = "gray75", alpha = 0.2)+
+  geom_spatial_text_repel(data = sample_data[1:5,], mapping = aes(x = golda.x,  y = golda.y, label = distance, color = relevant), crs = 4326, hjust = 0.5, size = 3.5)+
   geom_text_repel(data = point_labels, mapping = aes(x = x, y = y, label = label), xlim = c(35.5,36), point.padding = 0.1,  arrow = arrow(length = unit(0.015, "npc"), type = "closed"), segment.linetype = 8, color = "gray55", segment.color = "gray80", size = 3)+
-  scale_color_manual(values = c("yes" = "red", "no" = "gray60"))+
+  scale_color_manual(values = c("yes" = "red", "no" = "gray50"))+
   scale_linetype_manual(values = c("dashed","solid"))+
   xlim(34,36)+
   coord_sf(clip = "off")+
@@ -434,19 +454,24 @@ ggplot(isr_map_sf)+
   #labs(title = "Finding the nearest Golda location for each grid")+
   theme(plot.title = element_text(size = 13, hjust = 0.5))+
   theme_void()
+
+ggsave("img/plots/grid_example.png", width = 4, height = 7)
 ```
 
+--
 
-[ADD various polygons using st_centroid]
+.pull-right[
+<img src='img/plots/grid_example.png' height = 550px>
+]
+
+
+---
+background-image: url("img/conspiracy.jpg")
+background-size: cover
 
 ---
 
-## st_distance
 
-Now we're ready
-
-
-We now have our grids and 
 
 ---
 - Add disclaimer about my knowledge - tip of the ice
