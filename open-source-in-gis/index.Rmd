@@ -7,6 +7,7 @@ date: ""
 output:
   xaringan::moon_reader:
     lib_dir: libs
+    css: ["css/xaringan-themer.css"]
     nature:
       highlightStyle: github
       highlightLines: true
@@ -20,7 +21,7 @@ editor_options:
 ```{r}
 options(htmltools.dir.version = FALSE)
 knitr::opts_chunk$set(
-  fig.width=9, fig.height=3.5, fig.retina=3,
+  fig.width=9, fig.height=6, fig.retina=3,
   out.width = "100%",
   cache = FALSE,
   echo = FALSE,
@@ -36,6 +37,12 @@ library(xaringanExtra)
 library(sf)
 library(readr)
 library(leaflet)
+library(dplyr)
+library(readr)
+
+library(purrr)
+library(glue)
+library(htmltools)
 
 ```
 
@@ -195,7 +202,7 @@ Where do you find Golda's ice-cream locations?
 - [Scrape the data from the website](https://github.com/AmitLevinson/Datasets/blob/master/golda/golda-icecreams.R)
 
 ```{r echo = FALSE}
-golda_html_raw <- readRDS("data/golda_html_raw.Rds")
+golda_html_raw <- readRDS("data/golda/golda_html_raw.Rds")
 
 golda_html_raw[2]
 ```
@@ -218,7 +225,7 @@ Final output looked like this (total of 79 addresses):
 
 ```{r}
 library(readxl)
-locations_raw <- read_xlsx("data/golda_locations_w_English.xlsx")
+locations_raw <- read_xlsx("data/golda/golda_locations_w_English.xlsx")
 
 knitr::kable(locations_raw[2,])
 ```
@@ -236,32 +243,146 @@ background-image: url(img/worst_day_full.jpg)
 background-size: contain
 
 ---
-## st_transform
 
-- our initial golda points come as long & lat.
+## How does our data look?
 
-- we need it as geographic coordinates for a plot, and as projected for calculating distances.
+```{r}
+golda_locations <- read_csv("data/golda/golda_locations.csv") %>% 
+  mutate(id = 1:nrow(.), .before = city)
+```
 
 
-ADD PLOT WITH POINTS
+```{r echo = FALSE, warning = TRUE}
+make_label <- function(x, y, n){
+  glue("<p style='text-align:right;font-family:Calibri;font-size:12px;'>
+    <b>{x}</b></br>
+  {y}<br/>
+  <span style='color:#808080;'>{n}</p>") %>% 
+    HTML()
+}
+# Create labels
+ice_cream_labels <- pmap(list(golda_locations$city, golda_locations$street,golda_locations$number), make_label)
+# Use an icon for points
+ice_cream_icon <-  makeIcon("https://upload.wikimedia.org/wikipedia/commons/2/2c/Ice-cream-solid.svg", iconWidth = 8, iconHeight = 12)
 
 
+leaflet(data = golda_locations) %>% 
+  addTiles() %>% 
+  addMarkers(data = golda_locations, icon = ice_cream_icon, label = ~ ice_cream_labels)
+```
 
 ???
+
+We haven't done any manipulation yet, notice the warning message
 
 I wanted to enable users to interact with the map so leaflet was important here (and not, for example, ggplot)
 
 
+---
+
+## st_transform
+
+Previously leaflet recognized lat & long, but we should be more explicit and specifiy our coordinate reference systems:
+
+--
+
+**Geographic**
+
+--
+
+```{r echo = FALSE, highlight.output =c(5)}
+golda_projected <- golda_locations %>% 
+  st_as_sf(coords = c("lon", "lat"), crs = 4326)
+
+golda_projected["geometry"][1,]
+```
+
+--
+
+**Projected**
+
+--
+
+```{r echo = FALSE, highlight.output =c(5)}
+golda_meters <- st_transform(golda_projected, crs = 2039)
+
+golda_meters["geometry"][1,]
+```
+
 
 ---
 
-## st_
+### st_make_grid & st_intersection
 
 - We want to calculate distances, but to where?
 
-- Use grids as specific locations
 
-MAP OF israel in grids
+
+.column[
+.center[
+#### Original map
+
+
+```{r eval = FALSE}
+library(ggplot2)
+isr_map_sf <- st_transform(st_read("data/maps/israel/israel_borders.shp", quiet = TRUE), 4326)
+
+ggplot(isr_map_sf)+
+  geom_sf()+
+  theme_void()
+```
+<img src='img/plots/map.png' height = 350px>
+]
+]
+--
+
+.column[
+.center[
+#### Grid layout
+
+
+```{r eval = FALSE}
+isr_map <- st_transform(isr_map_sf, crs = 2039)
+# Make square grid in the boundaries of Israel
+box_isr <- st_make_grid(isr_map,  cellsize = 2000)
+
+ggplot(box_isr)+
+  geom_sf()+
+  theme_void()
+
+ggsave("img/plots/map.png", width = 4, height = 7)
+```
+
+<img src='img/plots/squaregrid.png' height = 350px>
+]
+]
+
+--
+
+.column[
+.center[
+#### Israel as grid
+
+
+```{r eval = FALSE}
+# Note it's in crs 2039
+grid <- st_intersection(new_isr, isr_map)
+
+# Too slow to plot so we'll load images
+ggplot(grid)+
+  geom_sf()+
+  theme_void()
+
+ggsave("img/plots/grid_map.png", width = 4, height = 7)
+
+grid_wgs <- readRDS("data/maps/grid_wgs.rds")
+
+```
+<img src='img/plots/grid_map.png' height = 350px>
+
+]
+]
+
 
 ???
 The grids help overcoming the reactivity we might find in web based apps
@@ -278,7 +399,7 @@ The grids help overcoming the reactivity we might find in web based apps
 
 [ADD various polygons using st_centroid]
 
---- 
+---
 
 ## st_distance
 
