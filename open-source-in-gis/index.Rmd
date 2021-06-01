@@ -11,6 +11,7 @@ output:
     nature:
       highlightStyle: github
       highlightLines: true
+      highlightSpans: true
       countIncrementalSlides: false
     includes:
       after_body: "additional-html/collapse-output.html"
@@ -377,7 +378,6 @@ ggplot(grid)+
 
 ggsave("img/plots/grid_map.png", width = 4, height = 7)
 
-grid_wgs <- readRDS("data/maps/grid_wgs.rds")
 
 ```
 <img src='img/plots/grid_map.png' height = 400px>
@@ -399,8 +399,13 @@ The grids help overcoming the reactivity we might find in web based apps
 
 .pull-left[
 
-Example: 
+Example for 1 grids cell: 
 ```{r echo = FALSE}
+# grids in wgs84
+grid_wgs <- readRDS("data/maps/grid_wgs.rds")
+# grids in projected
+grid <- readRDS("data/maps/grid.rds")
+
 # Create a sampled dataframe
 dataum <- data.frame(
   geometry = st_geometry(golda_projected),
@@ -411,7 +416,7 @@ both_distances <- map_dfc(dataum, ~ st_transform(.x, crs = 2039))
 
 ```
 
-```{r echo = TRUE}
+```{r echo = TRUE, highlight.output = c(5)}
 example_distances <- st_distance(x = both_distances$geometry, y = both_distances$geometry.1[1])
 # Print 10:
 head(set_units(example_distances, "km"), 10)
@@ -423,8 +428,6 @@ head(set_units(example_distances, "km"), 10)
 --
 
 ```{r eval=  FALSE}
-
-
 sample_data <- both_distances %>% 
   map_dfc(~ st_transform(.x, crs = 4326) %>% st_coordinates(.x)) %>% 
   map_dfc(as.data.frame) %>% 
@@ -455,6 +458,7 @@ ggplot(isr_map_sf)+
   theme(plot.title = element_text(size = 13, hjust = 0.5))+
   theme_void()
 
+
 ggsave("img/plots/grid_example.png", width = 4, height = 7)
 ```
 
@@ -464,10 +468,129 @@ ggsave("img/plots/grid_example.png", width = 4, height = 7)
 <img src='img/plots/grid_example.png' height = 550px>
 ]
 
-
 ---
+
 background-image: url("img/conspiracy.jpg")
 background-size: cover
+---
+## Cosmetic touches <i class="fas fa-wand-magic"></i>
+
+```{r eval = FALSE}
+
+# Commented out and loaded as an rds instead. Calculate distances:
+distances <- st_distance(golda_meters, st_centroid(grid)) %>% 
+as_tibble()
+
+
+distances <- read_rds("data/maps/distances.rds")
+
+golda_distances <- data.frame(
+  # We want grids in a WGS 84 CRS:
+  us = st_transform(grid, crs = 4326),
+  # Extract minimum distance for each grid
+  distance_km = map_dbl(distances, min)/1000,
+  # Extract the value's index for joining with the ice-cream location info
+  location_id = map_dbl(distances, function(x) match(min(x), x))) %>% 
+  # Join with the ice-cream table
+  left_join(golda_projected, by = c("location_id" = "id"))
+
+# saveRDS(golda_distances, "data/maps/golda_distances.Rds")
+
+```
+
+```{r}
+icon::fa("rocket")
+
+```
+
+
+```{r eval = FALSE}
+# Decrease size of ice-cream icons
+ice_cream_icon <- makeIcon("https://upload.wikimedia.org/wikipedia/commons/2/2c/Ice-cream-solid.svg", iconWidth = 6, iconHeight = 10)
+
+# Bin ranges for a nicer color scale
+bins <- c(0,5,15,30,50,70)
+# Create a binned color palette
+pal <- colorBin(c("#FF1554", "#FF3C70", "#FF7096", "#FFA4BC", "#FFE5EC"), 
+                domain = golda_distances$distance_km, bins = bins, reverse = TRUE)
+
+
+	#ff084a
+# Function to create the labels indicating distances
+make_label_distances <- function(km, street, city){
+  glue("
+  <div style='text-align:left;'>
+  You are <span style='font-size:13px;'><b>{round(km, 1)}</b></span> km from the nearest location at:</div>
+  <div style='text-align:right;'>
+       {street}, {city}</div>") %>% 
+    HTML()}
+
+
+# Create labels (better approach than the blog version)
+golda_distances <- golda_distances %>% 
+  mutate(popup_label = pmap(list(distance_km, street,city), make_label_distances))
+
+# Save for easier loading below in the presentation:
+# saveRDS(golda_distances$popup_label[1], "data/golda/distance_labels.rds")
+
+
+full_map <- leaflet() %>% 
+  addTiles() %>% 
+  addMarkers(data = golda_projected, icon = ~ice_cream_icon, group = "Ice-cream locations") %>% 
+  addPolygons(data = golda_distances[[1]], fillColor = pal(golda_distances$distance_km), fillOpacity = 0.8, weight =0, 
+              opacity =1, color = "transparent", group = "Distances", popup = golda_distances$popup_label,
+              highlight = highlightOptions(weight = 2.5, color = "#666", bringToFront = TRUE, opacity= 1),
+              popupOptions = popupOptions(autoPan = FALSE,closeOnClick = TRUE, textOnly = T)) %>% 
+   addLegend(pal = pal, values = (golda_distances$distance_km), opacity = 0.8, 
+                         title = "Distance (Km)", position= "bottomright") %>% 
+  addLayersControl(overlayGroups = c("Ice-cream locations", "Distances"),
+                   options = layersControlOptions(collapsed = FALSE))
+
+# Save the widget to use as an iframe:
+# htmlwidgets::saveWidget(full_map, "data/widgets/full_map.html")
+```
+
+--
+
+```{r}
+golda_distances <- readRDS("data/maps/golda_distances.rds")
+
+glimpse(golda_distances)
+
+```
+
+--
+
+```{r eval = FALSE, echo = TRUE}
+create_label_distances <- function(km, street, city){
+  glue("
+  <div style='text-align:left;'>
+  You are <span style='font-size:13px;'><b>`{round(km, 1)}`</b></span> km from the nearest location at:</div>
+  <div style='text-align:right;'>
+       `{street}`, `{city}`</div>") %>% 
+    HTML()}
+```
+
+--
+
+```{r}
+distance_labels <- readRDS("data/golda/distance_labels.rds")
+head(distance_labels,1)
+```
+
+
+
+
+---
+
+## Et Voila
+
+.center[
+<iframe src='data/widgets/full_map.html' width = 650, height = 500></iframe>
+]
+---
+
+
 
 ---
 
