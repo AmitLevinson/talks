@@ -150,14 +150,17 @@ Fix up highlighting the column
 ---
 
 ## It's time to to learn some GIS
+--
 
 - Tried some additional attempts in the #30daysmapchallenge
 
+--
+
 - Fiddled around and sometimes hit home
 
-- Realized it's time to get my hand dirty in some spatial data
+--
 
-![]()
+- Realized it's time to get my hands dirty
 
 ---
 class: inverse, center, middle
@@ -188,7 +191,8 @@ Where do you find Golda's ice-cream locations?
 
 --
 
-![](img/golda_css.png)
+<img src='img/golda_css.png'>
+
 ---
 
 # Data collection
