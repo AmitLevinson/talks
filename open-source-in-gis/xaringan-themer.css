@@ -125,6 +125,7 @@ a, a > code {
   bottom: 20px;
   padding-right: 4em;
   font-size: 0.7em;
+  color: #767676;
 }
 .remark-code-line-highlighted {
   background-color: var(--code-highlight-color);
