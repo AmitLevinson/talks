@@ -58,6 +58,9 @@ library(xaringanthemer)
 ```{r}
 xaringanExtra::use_tile_view()
 xaringanExtra::use_freezeframe()
+xaringanExtra::use_extra_styles(
+  hover_code_line = TRUE         #<<
+)
 ```
 
 
@@ -102,7 +105,7 @@ class: bold-last-item
 
 --
 
-- Sociology MA Graduate
+- Sociology MA Graduate, BGU
 
 --
 
@@ -110,11 +113,16 @@ class: bold-last-item
 
 --
 
+
+- Had no idea what is GIS prior to using R
+
+--
+
 - Enjoy:
 
 --
 
-  - open source tools (R, Linux, Git, MySQL)
+  - Open source tools (R, Linux, Git, MySQL)
   
 --
 
@@ -126,11 +134,7 @@ class: bold-last-item
 
 --
 
-- Had no idea what is GIS prior to using R
-
---
-
-- Big fan of cookies & milk
+  - &#127850; & &#129371;
 
 ---
 
@@ -460,7 +464,7 @@ The grids help overcoming the reactivity we might find in web based apps
 
 ## Distances
 
-We have our grid cells, how do we identify the **nearest** ice-cream location?
+We have our grid cells, how do we identify the **nearest ice-cream location?**
 
 --
 
@@ -829,4 +833,4 @@ class: inverse, center, middle
 
 # Thank you!
 
-<img src='img/icecream.png' height = 200px>
+<img src='img/icecream.png' height =200px>
