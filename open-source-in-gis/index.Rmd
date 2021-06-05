@@ -255,7 +255,7 @@ Where do you find ice-cream locations data?
 
 --
 
-<img src='img/golda_css.png'>
+<img src='https://github.com/AmitLevinson/talks/blob/main/open-source-in-gis/img/golda_css.PNG?raw=true'>
 
 ---
 class: bold-last-item
