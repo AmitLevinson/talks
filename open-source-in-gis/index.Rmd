@@ -1,20 +1,32 @@
 ---
-title: ""
-subtitle: ""
-author: ""
-institute: ""
-date: ""
+title: "Learning GIS with<br>ice-cream parlers"
+author:
+  - Amit Levinson
+date: 'June 9, 2021'
+description: |
+  Outlining my journey learning some GIS by mapping ice-cream parlors
+url: "https://amitlevinson.github.io/talks/open-source-in-gis"
+twitterImage: "https://github.com/AmitLevinson/talks/tree/main/open-source-in-gis/img/social.png"
+talk_event: "South Coast MA UseR Group"
+talk_event_url: https://www.meetup.com/South-Coast-useR-Group/events/277235768/
+talk_location: Virtual Presentation
+talk_code_url: https://github.com/gadenbuie/slides/tree/gh-pages/sliding-in-style
+talk_slides_url: https://slides.garrickadenbuie.com/sliding-in-style
 output:
   xaringan::moon_reader:
     lib_dir: libs
-    css: ["css/xaringan-themer.css"]
+    css: xaringan-themer.css
     nature:
       highlightStyle: github
       highlightLines: true
       highlightSpans: true
       countIncrementalSlides: false
-    includes:
-      after_body: "additional-html/collapse-output.html"
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+    seal: false
 editor_options: 
   chunk_output_type: console
 ---
@@ -33,6 +45,25 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r xaringan-themer, include = FALSE, eval = FALSE}
+library(xaringanthemer)
+
+# Run only first time to generate the themer css 
+# style_mono_accent(
+#   base_color = "#3f51b5",
+#   code_font_google   = google_font("Fira Mono")
+# )
+```
+
+```{r}
+xaringanExtra::use_tile_view()
+```
+
+
+```{r}
+icon_color <- "#3f51b5"
+```
+
 ```{r}
 library(xaringanExtra)
 library(sf)
@@ -46,37 +77,60 @@ library(htmltools)
 library(ggspatial)
 library(ggrepel)
 library(units)
-
+library(icons)
 ```
 
-name: title-slide
+class: title-slide, center, bottom
+background-image: linear-gradient(to bottom, transparent 0%, black 120%), url('img/cover.png')
 
-.footnote[Add a nice cover image and info about me]
 
-# "Learning GIS through mapping ice-cream parlers"
 
-9.6.2021
+# "Learning GIS with<br>ice-cream parlers"
 
-"Open Source in GIS conference"
-.small[Organized by Lior Kaplan]
 
-Amit Levinson
+Open Source in GIS conference
+June 9th, 2021
 
-[amitlevinson.com](https://www.amitlevinson.com)
+.side-text[
+Amit Levinson, 
 
-Twitter icon | Linkedin Icon | GitHub Icon
-
+[`r icon_style(fontawesome("home"), fill = "white")`](https://twitter.com/Amit_Levinson) [`r icon_style(fontawesome("github"), fill = "white")`](https://github.com/AmitLevinson) [`r icon_style(fontawesome("twitter"), fill = "white")`](https://twitter.com/Amit_Levinson) [`r icon_style(fontawesome("linkedin"), fill = "white")`](https://www.linkedin.com/in/amit-levinson/)
+]
 
 ---
+class: bold-last-item
+
 # About me
+
+--
 
 - Sociology MA Graduate
 
-- Been using R Programming lanugade for < 2 years
+--
 
-- Enjoy open source tools (Linux, Git, MySQL)
+- Been using R Programming language for < 2 years
 
-- Had no idea what is GIS prior to using such tools
+--
+
+- Enjoy:
+
+--
+
+  - open source tools (R, Linux, Git, MySQL)
+  
+--
+
+  - Blogging
+  
+--
+
+  - Learning new things
+
+--
+
+- Had no idea what is GIS prior to using R
+
+--
 
 - Big fan of cookies & milk
 
@@ -92,15 +146,19 @@ Twitter icon | Linkedin Icon | GitHub Icon
 - **Why is all this related to open source**
 
 ---
-## How I first encountered data
+## "Regular" data
 
-```{r echo = FALSE}
+How I first encountered and learn to work with data:
+
+```{r echo = TRUE}
 head(iris)
 ```
 
 ---
 
-## How I encountered ~spatial~ data.fn[1] (.shp)
+## Spatial data<sup>*</sup>
+
+How I encountered spatial data (e.g. `.shp`):
 
 ```{r include = FALSE}
 Sys.setlocale("LC_ALL", "Hebrew")
@@ -110,14 +168,14 @@ shelters <- read_sf("data/shelters/shelters.shp")
 
 ```{r echo = TRUE, highlight.output=c(1:5, 8,9)}
 head(shelters[,2])
-
 ```
 
-[1] For the sake of simplicity and to reflect my learning process, I address spatial data here as a vector format (and not, for example, raster).
+.footenote[ * For the sake of simplicity and to reflect my learning process, I address spatial data here as a vector format (and not, e.g., raster)
+] 
 
 
 ???
-Fix foot note
+shapefiles
 
 ---
 background-image: url(https://media.giphy.com/media/kfLPQJRuivFwqGBxp3/giphy.gif)
@@ -129,7 +187,11 @@ background-size: contain
 Gif credit: tenor.com
 ---
 
-## Using long & lat instead (.csv)
+## Returning to my comfort zone
+
+--
+
+Used a `.csv` file instead:
 
 ```{r highlight.output=c(2)}
 shelters_csv <- read_csv("data/shelters/shelters.csv")
@@ -137,38 +199,38 @@ shelters_csv <- read_csv("data/shelters/shelters.csv")
 head(shelters_csv[,2:3])
 ```
 
+--
+
 ```{r}
 leaflet(shelters_csv) %>% 
   addTiles() %>% 
   addCircles(radius = 4, color = "red", fill = TRUE)
 ```
 
-???
-
-Fix up highlighting the column
-
----
-
-## It's time to to learn some GIS
---
-
-- Tried some additional attempts in the #30daysmapchallenge
-
---
-
-- Fiddled around and sometimes hit home
-
---
-
-- Realized it's time to get my hands dirty
 
 ---
 class: inverse, center, middle
 
-# Exploring distances and ice-cream parlors
+# Exploring distances to ice-cream parlors
 
 ---
 # Background
+
+--
+
+- Fiddled around but never really knew what I was doing
+
+--
+
+- Participated in some days of the [#30Daysmapchallenge](https://github.com/tjukanovt/30DayMapChallenge)
+
+--
+
+- Realizing it's time to learn some spatial analysis
+
+--
+
+.center[]
 
 .pull-left[
 ### Inspiration
@@ -176,10 +238,12 @@ class: inverse, center, middle
 Dominic Royé's blog post about [distances to the sea in Iceland](https://dominicroye.github.io/en/2019/calculating-the-distance-to-the-sea-in-r/)
 ]
 
-.pull-right[
-### Serendipitous resources
+--
 
-Michael Dorman's workshop
+.pull-right[
+### Serendipitous resource
+
+Michael Dorman's [Spatial data analysis workshop](https://michaeldorman.github.io/R-Spatial-Workshop-at-CBS-2021/main.html) at Israel's CBS
 
 ]
 
@@ -187,13 +251,14 @@ Michael Dorman's workshop
 
 # Data
 
-Where do you find Golda's ice-cream locations?
+Where do you find ice-cream locations data?
 
 --
 
 <img src='img/golda_css.png'>
 
 ---
+class: bold-last-item
 
 # Data collection
 
@@ -228,6 +293,8 @@ locations_raw <- read_xlsx("data/golda/golda_locations_w_English.xlsx")
 knitr::kable(locations_raw[2,])
 ```
 
+???
+Notice we have long and lat, it's not yet even recognized as anything spatial.
 
 --
 
@@ -275,12 +342,17 @@ We haven't done any manipulation yet, notice the warning message
 
 I wanted to enable users to interact with the map so leaflet was important here (and not, for example, ggplot)
 
+---
+class: inverse, center, middle
+
+# Some spatial manipulations
+
 
 ---
 
-### Transforming
+## Transforming
 
-Previously leaflet recognized lat & long, but we should be more explicit and specifiy our coordinate reference systems:
+We might want to be more explicit with our spatial data:
 
 --
 
@@ -307,12 +379,15 @@ golda_meters <- st_transform(golda_projected, crs = 2039)
 golda_meters["geometry"][1,]
 ```
 
+???
+-- Essentially we might want to know what coordinate reference system were using
+-- CRS as in how the coordinates in our geometries relate to the surface of the Earth.
 
 ---
 
-### Grids
+## Grids
 
-We want to calculate distances, but **from where?**
+We want to calculate distances to Golda, but **from where?**
 
 --
 
@@ -388,13 +463,15 @@ The grids help overcoming the reactivity we might find in web based apps
 
 ---
 
-### Distances
+## Distances
+
+We have our grid cells, how do we identify the **nearest** ice-cream location?
 
 --
 
 .pull-left[
 
-Example for 1 grids cell: 
+Example for 1 grid cell to several Goldas: 
 ```{r echo = FALSE}
 # grids in wgs84
 grid_wgs <- readRDS("data/maps/grid_wgs.rds")
@@ -460,7 +537,7 @@ ggsave("img/plots/grid_example.png", width = 4, height = 7)
 --
 
 .pull-right[
-<img src='img/plots/grid_example.png' height = 550px>
+<img src='img/plots/grid_example.png' height = 450px>
 ]
 
 ---
@@ -468,7 +545,7 @@ ggsave("img/plots/grid_example.png", width = 4, height = 7)
 background-image: url("img/conspiracy.jpg")
 background-size: cover
 ---
-## Cosmetic touches <i class="fas fa-wand-magic"></i>
+## Cosmetics `r icon_style(fontawesome("magic"), fill = icon_color)`
 
 ```{r eval = FALSE}
 
@@ -665,15 +742,37 @@ class: inverse, center,middle
 ## Feedback
 
 --
-- Someone using the code for their own project
+
+
+`r icons::fontawesome("thumbs-down")` Why use an irrational number (2km<sup>2</sup>)
 
 --
 
-- Micha Silver's comment on using a raster approach instead of a vector one
+`r icons::fontawesome("thumbs-down")` Don't I have anything better to blog about?
 
 --
 
-- Why use an irrational number 2km<sup>2</sup>
+> Someone will always have what to say about your work
+
+
+
+### Positive
+
+--
+
+`r icons::fontawesome("thumbs-up")` Someone using the code to look at hamburger chains across Sydney, Aus.
+
+--
+
+`r icons::fontawesome("thumbs-up")` Micha Silver's suggestion to use a raster approach instead of a vector one
+
+--
+
+???
+- The person trying the hamburger plot was using the 2039, but that's the one for Israel!
+
+- Micha provided the code for using a raster approach. I was and currently barley am familiar with raster, but this definitely opens up new avenues and glad to have received that feedback.
+
 
 ---
 
@@ -681,12 +780,25 @@ class: inverse, center,middle
 
 --
 
-- It was available in an already used platform
+- It was available in an already used platform (R).
 
 --
 
 - Free
 
--- 
+--
 
-- Use others' code easily
+- Free
+
+--
+
+- Can use/change others' code freely
+
+--
+
+- Get to contribute back.
+
+---
+class: inverse, center, middle
+
+# Thank you!
