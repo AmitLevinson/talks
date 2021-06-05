@@ -277,7 +277,7 @@ table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
 }
 
 .side-text {
-  position: relative
+  position: absolute;
   font-size: 20px;
   bottom: 1em;
   right: 3em;

@@ -34,7 +34,7 @@ editor_options:
 ```{r echo = FALSE}
 options(htmltools.dir.version = FALSE)
 knitr::opts_chunk$set(
-  fig.width=9, fig.height=6, fig.retina=3,
+  fig.width=8, fig.height=5, fig.retina=3,
   out.width = "100%",
   cache = FALSE,
   echo = FALSE,
@@ -57,6 +57,7 @@ library(xaringanthemer)
 
 ```{r}
 xaringanExtra::use_tile_view()
+xaringanExtra::use_freezeframe()
 ```
 
 
@@ -78,6 +79,7 @@ library(ggspatial)
 library(ggrepel)
 library(units)
 library(icons)
+library(extrafont)
 ```
 
 class: title-slide, center, bottom
@@ -85,16 +87,12 @@ background-image: linear-gradient(to bottom, transparent 0%, black 120%), url('i
 
 
 
-# "Learning GIS with<br>ice-cream parlers"
+# "Learning GIS with<br>ice-cream parlors"
 
 
-Open Source in GIS conference
-June 9th, 2021
+Open Source in GIS conference &bull; June 9th, 2021
 
-.side-text[
-Amit Levinson, 
-
-[`r icon_style(fontawesome("home"), fill = "white")`](https://twitter.com/Amit_Levinson) [`r icon_style(fontawesome("github"), fill = "white")`](https://github.com/AmitLevinson) [`r icon_style(fontawesome("twitter"), fill = "white")`](https://twitter.com/Amit_Levinson) [`r icon_style(fontawesome("linkedin"), fill = "white")`](https://www.linkedin.com/in/amit-levinson/)
+.small[ Amit Levinson &bull; [`r icon_style(fontawesome("home"), fill = "white")`](https://twitter.com/Amit_Levinson) [`r icon_style(fontawesome("github"), fill = "white")`](https://github.com/AmitLevinson) [`r icon_style(fontawesome("twitter"), fill = "white")`](https://twitter.com/Amit_Levinson) [`r icon_style(fontawesome("linkedin"), fill = "white")`](https://www.linkedin.com/in/amit-levinson/)
 ]
 
 ---
@@ -136,16 +134,7 @@ class: bold-last-item
 
 ---
 
-# Objectives for today
 
-
-- Explore some of my initial attempts at spatial data
-
-- Unravel my recent project as dive into GIS
-
-- **Why is all this related to open source**
-
----
 ## "Regular" data
 
 How I first encountered and learn to work with data:
@@ -170,7 +159,7 @@ shelters <- read_sf("data/shelters/shelters.shp")
 head(shelters[,2])
 ```
 
-.footenote[ * For the sake of simplicity and to reflect my learning process, I address spatial data here as a vector format (and not, e.g., raster)
+.footnote[*  For the sake of simplicity and to reflect my learning process, I address spatial data here as a vector format (and not, e.g., raster)
 ] 
 
 
@@ -226,7 +215,7 @@ class: inverse, center, middle
 
 --
 
-- Realizing it's time to learn some spatial analysis
+- Realized it's time to learn some spatial analysis
 
 --
 
@@ -331,10 +320,16 @@ ice_cream_labels <- pmap(list(golda_locations$city, golda_locations$street,golda
 ice_cream_icon <-  makeIcon("https://upload.wikimedia.org/wikipedia/commons/2/2c/Ice-cream-solid.svg", iconWidth = 8, iconHeight = 12)
 
 
-leaflet(data = golda_locations) %>% 
+simple_map <- leaflet(data = golda_locations) %>% 
   addTiles() %>% 
   addMarkers(data = golda_locations, icon = ice_cream_icon, label = ~ ice_cream_labels)
+
+# htmlwidgets::saveWidget(simple_map, "data/widgets/simple_map.html")
 ```
+
+.center[
+<iframe src='data/widgets/simple_map.html' width = 650, height = 500></iframe>
+]
 
 ???
 
@@ -542,9 +537,41 @@ ggsave("img/plots/grid_example.png", width = 4, height = 7)
 
 ---
 
-background-image: url("img/conspiracy.jpg")
-background-size: cover
+## Distances
+
+How should we use color to represent the distance?
+
+--
+
+
+```{r}
+
+# This is created below but also used here:
+golda_distances <- readRDS("data/maps/golda_distances.rds")
+
+golda_distances %>% 
+  ggplot(aes(x = distance_km))+
+  geom_histogram(bins = 50, fill = "gray65")+
+  theme_minimal()+
+  labs(title = "Distribution of distances to the nearest ice-cream location",
+       x = "Distance (km)",
+       y = "Count")+
+  theme(
+    text = element_text(family = "Roboto Condensed"),
+    plot.title.position = "plot",
+    plot.title = element_text(size = 14, color = "#3f51b5", face= "bold", family = "Avaro"),
+    axis.text = element_text(color = "gray30"),
+    axis.title = element_text(color = "gray30"),
+    panel.grid.minor.y = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    plot.background = element_rect(fill =  "transparent", color =  "transparent"),
+    panel.background = element_rect(fill = "transparent", color =  "transparent")
+  )
+```
+
+
 ---
+
 ## Cosmetics `r icon_style(fontawesome("magic"), fill = icon_color)`
 
 ```{r eval = FALSE}
@@ -620,7 +647,7 @@ full_map <- leaflet() %>%
 --
 
 ```{r}
-golda_distances <- readRDS("data/maps/golda_distances.rds")
+
 
 glimpse(golda_distances)
 
@@ -645,10 +672,8 @@ distance_labels <- readRDS("data/golda/distance_labels.rds")
 head(distance_labels,1)
 ```
 
-
-
-
 ---
+
 
 ## Et Voila
 
@@ -755,6 +780,7 @@ class: inverse, center,middle
 > Someone will always have what to say about your work
 
 
+--
 
 ### Positive
 
@@ -780,11 +806,7 @@ class: inverse, center,middle
 
 --
 
-- It was available in an already used platform (R).
-
---
-
-- Free
+- GIS was available in an already used OS platform (R)
 
 --
 
@@ -796,9 +818,15 @@ class: inverse, center,middle
 
 --
 
-- Get to contribute back.
+- Pushes to high standards knowing others see/read your code
+
+--
+
+- Get to contribute back
 
 ---
 class: inverse, center, middle
 
 # Thank you!
+
+<img src='img/icecream.png' height = 200px>
