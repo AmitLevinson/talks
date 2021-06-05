@@ -163,7 +163,8 @@ shelters <- read_sf("data/shelters/shelters.shp")
 head(shelters[,2])
 ```
 
-.footnote[*  For the sake of simplicity and to reflect my learning process, I address spatial data here as a vector format (and not, e.g., raster)
+.footnote[
+\* To reflect my learning process, I address spatial data here as a vector format (and not, e.g., raster)
 ] 
 
 
@@ -215,11 +216,15 @@ class: inverse, center, middle
 
 --
 
-- Participated in some days of the [#30Daysmapchallenge](https://github.com/tjukanovt/30DayMapChallenge)
+- Participated in several days of the [#30Daysmapchallenge](https://github.com/tjukanovt/30DayMapChallenge)
 
 --
 
 - Realized it's time to learn some spatial analysis
+
+
+.footnote[The talk is based on an [earlier blog post on the topic](https://amitlevinson.com/blog/exploring-ice-cream-locations/)
+]
 
 --
 
@@ -232,6 +237,8 @@ Dominic Royé's blog post about [distances to the sea in Iceland](https://domini
 ]
 
 --
+
+
 
 .pull-right[
 ### Serendipitous resource
@@ -561,9 +568,9 @@ golda_distances %>%
        x = "Distance (km)",
        y = "Count")+
   theme(
-    text = element_text(family = "Roboto Condensed"),
+    text = element_text(family = "Noto Serif"),
     plot.title.position = "plot",
-    plot.title = element_text(size = 14, color = "#3f51b5", face= "bold", family = "Avaro"),
+    plot.title = element_text(size = 14, color = "#3f51b5", face= "bold", family = "Noto Serif"),
     axis.text = element_text(color = "gray30"),
     axis.title = element_text(color = "gray30"),
     panel.grid.minor.y = element_blank(),
@@ -685,81 +692,6 @@ head(distance_labels,1)
 <iframe src='data/widgets/full_map.html' width = 650, height = 500></iframe>
 ]
 
-
-
-
-
-???
-- Add disclaimer about my knowledge - tip of the ice
-- [ ] Explore some of my initial attempts at spatial data
-
-   - How was I used to working with data?
-  
-   - First attempt at plotting bomb shelters - B7 open access data
-  
-   - What is this column and weird data format?
-  
-   - Oh I know, final output
-  
-   - very nice and excited
- 
- - 30 daymapchallenge
- 
-    - 1 example of population plot enhancing
-    
-- [ ] Unravel my recent project and what it taught me about working with GIS
-
-  - I realized I don't know and want to learn more: What on earth are projections? What ~the hell~ is a raster? how can I manipulate polygons? What are some cool things in the {sf} library? How can we add interactivity to a map? and what should I do it on?
-
-  - Well let's explore distances, that seems cool. Also came across Dominic's blog post.
-  
-  - Collecting the data using R
-    - scraping
-    - geocoding it
-    - reverse geocoding it
-    - Manually verify locations
-    
-  - OK, preliminary plot, so far so good.
-  
-  - Now for distances, but distance from where?
-    - we need something 'specific'
-    - Create grids, but what are grids?
-    - and what proejction do I need?
-  - Short break, luckily Michael published X during when I was working on it.
-  
-  - Got it, but what exactly occurs here?
-  
-    - So I published a small post on it, small wins
-    - Plus, it got the most attention of a LinkedIn post so far.
-    
-  - So we cut Israel into grids, now what?
-    - Calculate the distance for each square grid.
-    - Any distance? where it's at minimum!
-    - example for one grid
-    - now for all grids a N * M matrix
-    
-  - Ok, but let's add interactivity
-    - use leaflet to the polygon and colors
-    - but also with some simple html & CSS we add a neat layer of interactivity
-  
-  - Publish
-  
-  - Feedback (good)
-    - Email saying it helped them do X
-    - an email someone liking it but suggesting an improvement! How much improved? by XX seconds.
-    - Learn more about maps
-    
-    - Feedback (bad?)
-      - Why a 2 squared km?
-      - Why Golda? don't have anything else interesting to do about?
-      
-- [ ] How's all this related to open source
-  - Not sure I would have done it if I'd still be using my previously learned propreitary software (SPSS)
-  - Extending my already-known-tool to use it in maps
-  - Contributing back to the community
-  - FREE
-  - Code is accessible to explore and manipulate
-  - Expanding my repoirtere of skills
 
 ---
 class: inverse, center,middle
