@@ -95,7 +95,7 @@ background-image: linear-gradient(to bottom, transparent 0%, black 120%), url('i
 
 Open Source in GIS conference &bull; June 9th, 2021
 
-.small[ Amit Levinson &bull; [`r icon_style(fontawesome("home"), fill = "white")`](https://twitter.com/Amit_Levinson) [`r icon_style(fontawesome("github"), fill = "white")`](https://github.com/AmitLevinson) [`r icon_style(fontawesome("twitter"), fill = "white")`](https://twitter.com/Amit_Levinson) [`r icon_style(fontawesome("linkedin"), fill = "white")`](https://www.linkedin.com/in/amit-levinson/)
+.small[ Amit Levinson &bull; [`r icon_style(fontawesome("home"), fill = "white")`](https://amitlevinson.com) [`r icon_style(fontawesome("github"), fill = "white")`](https://github.com/AmitLevinson) [`r icon_style(fontawesome("twitter"), fill = "white")`](https://twitter.com/Amit_Levinson) [`r icon_style(fontawesome("linkedin"), fill = "white")`](https://www.linkedin.com/in/amit-levinson/)
 ]
 
 ---
