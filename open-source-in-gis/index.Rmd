@@ -6,7 +6,7 @@ date: 'June 9, 2021'
 description: |
   Outlining my journey learning some GIS by mapping ice-cream parlors.
 url: "https://amitlevinson.github.io/talks/open-source-in-gis"
-twitterImage: "https://github.com/AmitLevinson/talks/tree/main/open-source-in-gis/img/share-card.png"
+twitterImage: "https://github.com/AmitLevinson/talks/blob/main/open-source-in-gis/img/share-card.png?raw=true"
 talk_event: "Open source in GiS conference"
 talk_location: Virtual Presentation
 talk_code_url: https://github.com/AmitLevinson/talks/tree/main/open-source-in-gis
