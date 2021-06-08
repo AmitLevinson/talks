@@ -81,6 +81,8 @@ meta() %>%
     title = rmarkdown::metadata$title,
     url = rmarkdown::metadata$url,
     image = rmarkdown::metadata$twitterImage,
+    image_alt = paste0("A hand with black nail polish holding an ice-cream cone with two scoops with a beach and ocean background. On the image is written:",
+                       title = rmarkdown::metadata$title, " ", rmarkdown::metadata$talk_event, " ", rmarkdown::metadata$date, " And some social networks icons such as Twitter, GitHub and more."),
     twitter_card_type = "summary_large_image",
     twitter_creator = "Amit_Levinson"
   )
