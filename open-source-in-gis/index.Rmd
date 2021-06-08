@@ -272,6 +272,7 @@ Michael Dorman's [Spatial data analysis workshop](https://michaeldorman.github.i
 
 ]
 
+
 ---
 
 # Data
@@ -434,6 +435,8 @@ isr_map_sf <- st_transform(st_read("data/maps/israel/israel_borders.shp", quiet 
 ggplot(isr_map_sf)+
   geom_sf()+
   theme_void()
+
+ggsave("img/plots/map.png", width = 4, height = 7)
 ```
 <img src='img/plots/map.png' height = 400px>
 ]
@@ -454,7 +457,7 @@ ggplot(box_isr)+
   geom_sf()+
   theme_void()
 
-ggsave("img/plots/map.png", width = 4, height = 7)
+ggsave("img/plots/squaregrid.png", width = 4, height = 7)
 ```
 
 <img src='img/plots/squaregrid.png' height = 400px>
@@ -786,7 +789,7 @@ class: inverse, center,middle
 
 --
 
--- **The community!**
+- **The community!**
 
 ---
 class: inverse, center, middle
