@@ -179,6 +179,9 @@ head(iris)
 
 ## Spatial data<sup>*</sup>
 
+
+--
+
 How I encountered spatial data (e.g. `.shp`):
 
 ```{r include = FALSE}
@@ -197,6 +200,7 @@ head(shelters[,2])
 
 
 ???
+- data of shelters across beer-sheva
 shapefiles
 
 ---
@@ -210,8 +214,6 @@ Gif credit: tenor.com
 ---
 
 ## Returning to my comfort zone
-
---
 
 Used a `.csv` file instead:
 
