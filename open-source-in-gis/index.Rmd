@@ -1,10 +1,10 @@
 ---
-title: "Learning GIS with<br>ice-cream parlors"
+title: "Learning GIS with ice-cream parlors"
 author:
   - Amit Levinson
 date: 'June 9, 2021'
 description: |
-  Outlining my journey learning some GIS by mapping ice-cream parlors.
+  Outlining my journey learning GIS by mapping distances to ice-cream parlors.
 url: "https://amitlevinson.github.io/talks/open-source-in-gis"
 twitterImage: "share-card.png"
 talk_event: "Open source in GiS conference"
@@ -80,7 +80,7 @@ meta() %>%
   meta_social(
     title = rmarkdown::metadata$title,
     url = rmarkdown::metadata$url,
-    image = rmarkdown::metadata$twitterImage,
+    image = "share-card.png",
     image_alt = paste0("A hand with black nail polish holding an ice-cream cone with two scoops with a beach and ocean background. On the image is written:",
                        title = rmarkdown::metadata$title, " ", rmarkdown::metadata$talk_event, " ", rmarkdown::metadata$date, " And some social networks icons such as Twitter, GitHub and more."),
     og_type = "website",
