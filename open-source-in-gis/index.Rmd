@@ -739,10 +739,6 @@ class: inverse, center,middle
 --
 
 
-`r icons::fontawesome("thumbs-down")` Why use an irrational number (2km<sup>2</sup>)
-
---
-
 `r icons::fontawesome("thumbs-down")` Don't I have anything better to blog about?
 
 --
