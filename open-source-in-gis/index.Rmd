@@ -4,7 +4,7 @@ author:
   - Amit Levinson
 date: 'June 9, 2021'
 description: |
-  Outlining my journey learning GIS by mapping distances to ice-cream parlors.
+  Outlining my journey learning some GIS by mapping distances to the nearest ice-cream parlor.
 url: "https://amitlevinson.github.io/talks/open-source-in-gis"
 talk_event: "Open source in GiS conference"
 talk_location: Virtual Presentation
