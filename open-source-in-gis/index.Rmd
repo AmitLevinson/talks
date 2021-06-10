@@ -6,7 +6,6 @@ date: 'June 9, 2021'
 description: |
   Outlining my journey learning GIS by mapping distances to ice-cream parlors.
 url: "https://amitlevinson.github.io/talks/open-source-in-gis"
-twitterImage: "share-card.png"
 talk_event: "Open source in GiS conference"
 talk_location: Virtual Presentation
 talk_code_url: https://github.com/AmitLevinson/talks/tree/main/open-source-in-gis
@@ -80,7 +79,7 @@ meta() %>%
   meta_social(
     title = rmarkdown::metadata$title,
     url = rmarkdown::metadata$url,
-    image = "share-card.png",
+    image = "https://github.com/AmitLevinson/talks/blob/main/open-source-in-gis/share-card.png?raw=true",
     image_alt = paste0("A hand with black nail polish holding an ice-cream cone with two scoops with a beach and ocean background. On the image is written:",
                        title = rmarkdown::metadata$title, " ", rmarkdown::metadata$talk_event, " ", rmarkdown::metadata$date, " And some social networks icons such as Twitter, GitHub and more."),
     og_type = "website",
