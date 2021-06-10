@@ -753,16 +753,16 @@ class: inverse, center,middle
 
 --
 
-`r icons::fontawesome("thumbs-up")` Someone using the code to look at hamburger chains across Sydney, Aus.
+`r icons::fontawesome("thumbs-up")` Someone asking for technical assistance about using the code in another country.
 
 --
 
-`r icons::fontawesome("thumbs-up")` Micha Silver's suggestion to use a raster instead of a vector object
+`r icons::fontawesome("thumbs-up")` Micha Silver emailing me with complete code on how to do the same thing with rasters.
 
 --
 
 ???
-- The person trying the hamburger plot was using the 2039, but that's the one for Israel!
+- The person trying using the 2039, but that's the one for Israel!
 
 - Micha provided the code for using a raster approach. I was and currently barley am familiar with raster, but this definitely opens up new avenues and glad to have received that feedback.
 
