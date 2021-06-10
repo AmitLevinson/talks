@@ -65,7 +65,7 @@ xaringanExtra::use_extra_styles(
 #meta tags
 library(metathis)
 
-# Section taken form Garrick Aden‑Buie awesome slides
+# Section taken from Garrick Aden‑Buie awesome slides
 meta() %>% 
   meta_description(
     paste(
@@ -79,7 +79,7 @@ meta() %>%
   meta_social(
     title = rmarkdown::metadata$title,
     url = rmarkdown::metadata$url,
-    image = "https://github.com/AmitLevinson/talks/blob/main/open-source-in-gis/share-card.png?raw=true",
+    image = "https://amitlevinson.github.io/talks/open-source-in-gis/share-card.png",
     image_alt = paste0("A hand with black nail polish holding an ice-cream cone with two scoops with a beach and ocean background. On the image is written:",
                        title = rmarkdown::metadata$title, " ", rmarkdown::metadata$talk_event, " ", rmarkdown::metadata$date, " And some social networks icons such as Twitter, GitHub and more."),
     og_type = "website",
