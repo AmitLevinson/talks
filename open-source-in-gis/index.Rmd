@@ -53,11 +53,15 @@ library(xaringanthemer)
 # )
 ```
 
-```{r}
+```{r include = FALSE}
 xaringanExtra::use_tile_view()
 xaringanExtra::use_freezeframe()
 xaringanExtra::use_extra_styles(
   hover_code_line = TRUE         #<<
+)
+xaringanExtra::use_share_again()
+xaringanExtra::style_share_again(
+  share_buttons = c("twitter", "linkedin", "pocket", "facebook")
 )
 ```
 
@@ -89,7 +93,6 @@ meta() %>%
   )
 ```
 
-
 ```{r}
 icon_color <- "#3f51b5"
 ```
@@ -116,8 +119,6 @@ library(ggplot2)
 
 class: title-slide, center, bottom
 background-image: linear-gradient(to bottom, transparent 0%, black 120%), url('img/cover.png')
-
-
 
 # "Learning GIS with<br>ice-cream parlors"
 
@@ -523,11 +524,10 @@ grid <- readRDS("data/maps/grid.rds")
 # Create a sampled dataframe
 dataum <- data.frame(
   geometry = st_geometry(golda_projected),
-  location_grid = st_centroid(st_transform(rep(grid_wgs[350,],nrow(golda_projected)), crs = 2039)))
+  location_grid = st_centroid(st_transform(rep(grid_wgs[350],nrow(golda_projected)), crs = 2039)))
 
 # Our data points projected to a 
 both_distances <- map_dfc(dataum, ~ st_transform(.x, crs = 2039)) 
-
 ```
 
 ```{r echo = TRUE, highlight.output = c(5)}
