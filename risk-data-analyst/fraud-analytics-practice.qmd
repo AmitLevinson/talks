@@ -1,6 +1,7 @@
 ---
 title: "Risk Data Analyst - Talk Exercise"
 subtitle: "Two SQL challenges to practice your fraud analytics perspective"
+description-meta: "Two SQL challenges to practice your fraud analytics perspective"
 format: html
 editor: visual
 ---
