@@ -22,7 +22,9 @@ sqlconn <- dbConnect(odbc(),
 
 
 <meta name="twitter:card" content="featured" />
-<meta name="twitter:image" content="https://github.com/AmitLevinson/talks/tree/main/risk-data-analyst/featured.png" />
+<meta property="og:description" content="Two SQL challenges to practice your fraud analytics perspective" />
+<meta name="twitter:image" content="https://github.com/AmitLevinson/talks/blob/main/risk-data-analyst/featured.png?raw=true" />
+<meta property="og:image" content="https://github.com/AmitLevinson/talks/blob/main/risk-data-analyst/featured.png?raw=true" />
 
 
 Hi there,
