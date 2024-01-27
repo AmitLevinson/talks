@@ -21,12 +21,13 @@ sqlconn <- dbConnect(odbc(),
                       Database = "master")
 ```
 
-
 <meta name="twitter:card" content="featured.png" />
-<meta property="og:description" content="Two SQL challenges to practice your fraud analytics perspective" />
-<meta name="twitter:image" content="featured.png" />
-<meta property="og:image" content="featured.png" />
 
+<meta property="og:description" content="Two SQL challenges to practice your fraud analytics perspective" />
+
+<meta name="twitter:image" content="featured.png" />
+
+<meta property="og:image" content="featured.png" />
 
 Hi there,
 
@@ -36,7 +37,7 @@ If you have the time and energy, give the exercises a try before the talk!
 
 </br>
 
------
+------------------------------------------------------------------------
 
 ### 1. Bot Registrations
 
@@ -1071,7 +1072,6 @@ INSERT INTO user_registrations (first_name, last_name, email, registration_date)
 	('George', 'Kelcher', 'ruben45@hotmail.com', '2024-01-22');
 ```
 
-
 Or download as a csv:
 
 ```{r, echo = FALSE}
@@ -1085,9 +1085,7 @@ download_file(
 )
 ```
 
-
-
------
+------------------------------------------------------------------------
 
 ### 2. Money Laundering
 
@@ -1288,7 +1286,6 @@ INSERT INTO ml_payments(from_user,to_user,amount,payment_date) VALUES ('954','14
 
 ```
 
-
 Or download as a csv:
 
 ```{r, echo = FALSE}
@@ -1305,4 +1302,3 @@ download_file(
 ```{r, echo = FALSE}
 dbDisconnect(sqlconn)
 ```
-
