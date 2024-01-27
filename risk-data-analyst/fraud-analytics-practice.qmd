@@ -30,7 +30,7 @@ sqlconn <- dbConnect(odbc(),
 
 Hi there,
 
-This page contains two exercises we'll (partially) go over in my talk about Fraud Analytics.
+This page contains two fake exercises we'll (partially) go over in my talk about Fraud Analytics.
 
 If you have the time and energy, give the exercises a try before the talk!
 
