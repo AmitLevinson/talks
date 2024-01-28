@@ -47,7 +47,7 @@ If you have the time and energy, give the exercises a try before the talk!
 
 <summary>Hint</summary>
 
-Try searching for a specific pattern in the Name/Email/Registration date by which you can group users together. There's something to split the whol table into two (unequal) groups.
+Try searching for a specific pattern in the Name/Email/Registration date by which you can group users together. There's some pattern that will split the table into two (unequal) groups.
 
 </details>
 
